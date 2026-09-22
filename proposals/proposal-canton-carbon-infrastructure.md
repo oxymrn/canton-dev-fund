@@ -17,6 +17,36 @@ ecosystems (Polygon, Base, Celo). Canton is uniquely positioned to address those
 confidentiality that keeps OTC trading dominant today; its institutional custody model is native to the chain rather than retrofitted; and 
 registry alignment is built into the standard from day one rather than negotiated after tokenisation has already occurred.
 
+## RFP Category
+
+**RFP-12: RWA Standards** — specifically the *Daml and Institutional RWA Workflow Standards* area.
+
+This proposal develops reusable Daml models, interfaces, tooling and reference implementations for
+a real-world asset class, carbon credits, and for the institutional transaction workflows that
+surround it. Carbon is a real world asset with an established off-ledger registry infrastructure,
+an existing institutional buyer base, and no current representation standard on Canton.
+
+Mapping to the scope set out in the RFP:
+
+| RFP scope item | Where this proposal addresses it |
+|---|---|
+| Token and asset representation standards | Component A, Carbon Asset Standard; Milestone 1 |
+| Asset metadata standards | Structured metadata: methodology, registry, vintage, permanence |
+| Issuance, transfer, redemption and cancellation workflows | Lifecycle model (mint, transfer, retire); Milestone 1 |
+| Corporate actions and other asset lifecycle events | Retirement Framework; Milestone 3 |
+| Interoperability between Canton applications | Open contract library and integration documentation; Milestone 5 |
+| Integration mappings for existing institutional systems | Registry Integration Framework; Milestone 2 |
+| Conformance tests and reference implementations | Reference workflows and test flows; Milestones 3, 4 and 5 |
+
+**Secondary relevance:** RFP-13, Payments and DeFi, for the settlement and transfer patterns
+demonstrated in the reference workflows. Those patterns are a by-product of the standard rather
+than the object of this proposal.
+
+**Not applicable:** RFP-11, Public verifiability. This proposal does not address the publication of
+trusted aggregate metrics from private transaction data, and makes no claim in that area.
+
+**Suggested SIG label:** `token-asset-standards`.
+
 ## Specification
 
 ### 1. Objective
@@ -171,13 +201,14 @@ This proposal introduces new application-layer infrastructure and does not modif
 * certificate output format
 * end-to-end retirement test flows
 
-**Milestone 4: Reference Marketplace and Workflows**
+**Milestone 4: Reference Implementation and Conformance Workflows**
 **Estimated Delivery:** Month 4 - 5
-**Focus:** Enable asset access and price discovery
+**Focus:** Demonstrate the standard end to end, and establish conformance
 **Deliverables / Value Metrics:**
 - fixed-price listing mechanism
 - buyer interaction flow
 - at least two end-to-end workflows demonstrated e.g. retail buyer offsetting and bulk institutional retirement
+- conformance test suite, so a third-party implementation can verify it meets the standard
 * initial external evaluator feedback
 
 **Milestone 5: Documentation and Public Release**
@@ -245,6 +276,44 @@ Carbonmark will collaborate with the Foundation on:
 * developer walkthrough sessions
 * demonstrations to carbon market stakeholders (including to supply-side and demand-side users)
 * Attendance at ecosystem events to showcase the standard
+
+### Why the ecosystem needs this
+
+**The gap.** Canton has no representation standard for carbon credits. Any application wanting to
+handle carbon on Canton today must first define its own asset model, negotiate its own registry
+relationship, and build its own retirement path. That work is duplicated by every entrant, and the
+resulting representations do not interoperate. This is precisely the fragmentation that limited
+carbon market adoption on Polygon, Base and Celo, where multiple incompatible tokenised carbon
+standards emerged in parallel and liquidity divided between them.
+
+**Who benefits, and how.**
+
+* **Canton application developers** get an asset model, a metadata schema and a retirement
+  mechanism they can build on, rather than a prerequisite they must solve before starting. A
+  retirement platform, a corporate reporting tool or a structured product can each begin at their
+  own problem.
+* **Carbon registries** get one integration pattern to support rather than one per application.
+  Registry buy-in is the binding constraint on all onchain carbon work, and it does not scale if
+  every application arrives separately.
+* **Institutional buyers** get carbon held under the same privacy, custody and permissioning model
+  as the rest of their Canton assets, rather than as an exception requiring separate handling.
+* **Issuers and suppliers** get a representation that more than one application recognises, which
+  is the precondition for their inventory being reachable by more than one route.
+
+**How it drives adoption.** Carbon transactions are recurring and non-speculative: retirement is
+consumption, driven by compliance cycles and corporate commitments rather than by trading
+sentiment. That is a different transaction profile from most onchain activity and a durable one. It
+also brings a counterparty class onto Canton that is not otherwise present, namely carbon
+registries and the corporate buyers who transact through them.
+
+**Built for multiple issuers and applications, not one implementation.** The standard, the contract
+library and the integration documentation are the deliverables, and they are released open-source
+under Milestone 5 for any party to implement. Carbonmark builds the standard and provides the
+reference implementation, but holds no privileged position in it: no component requires Carbonmark
+to operate, and the registry integration framework is designed to onboard registries generally
+rather than to serve a single bilateral relationship. The reference marketplace exists to
+demonstrate conformance and to prove the workflows end to end, not to be the venue through which
+carbon on Canton must trade.
 
 ### Motivation
 
